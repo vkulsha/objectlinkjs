@@ -48,37 +48,45 @@ mind.logres=(v)=>typeof v==="string" ?
   mind.logstr(v) :
   mind.logstr(JSON.stringify(v))
 
-mind.get=(v)=>document.getElementById(v)
+mind.get=(eid)=>document.getElementById(eid)
 
-mind.ctrl=()=>{
-  const div=document.createElement("div");
-  div.id="ctrl";
-  div.style.width="100%";
-  document.body.appendChild(div);
+mind.getset=(eid,func)=>{
+  const obj=mind.get(eid)
+  return !obj ? func(eid=eid) : obj
 }
 
-mind.data=()=>{
-  const div=document.createElement("div"); 
-  div.id="data";
-  div.style.width="100%";
-  document.body.appendChild(div);
+mind.div=(eid)=>{
+  return mind.getset(eid, (eid)=>{
+    const div=document.createElement("div");
+    div.id=eid;
+    div.style.width="100%";
+    document.body.appendChild(div);
+    return div;
+  })
 }
 
-mind.result=()=>{
-  const div=document.createElement("div");
-  div.id="result";
-  div.style.width="100%";
-  div.style.marginTop="10px";
-  document.body.appendChild(div);
+mind.ctrl=()=>mind.div("ctrl")
+mind.data=()=>mind.div("data")
+mind.result=()=>mind.div("result")
+
+mind.focus=()=>{
+  return mind.getset("focus",(eid)=>{
+    const b=mind.crb([mind.oid,mind.pid],eid);
+    b.onclick=()=>{
+      window.alert(gv(mind.oid))
+    }
+    mind.ctrl().appendChild(b);
+    return b
+  })
 }
 
 mind.clk=(e)=>{
-  const data=document.getElementById("data");
+  const data=mind.data();
   data.innerHTML="";
   const oid=e.target.oid;
   mind.oid=oid;
   gl(oid).forEach(id=>data.appendChild(mind.but(id)));
-  mind.get("focus").innerHTML=[mind.oid,mind.pid]
+  mind.focus().innerHTML=[mind.oid,mind.pid]
   mind.logres("")
   mind.em(oid)
 }
@@ -109,133 +117,138 @@ mind.but=(oid)=>{
   return b;
 }
 
-mind.focus=()=>{
-  const b=mind.crb([mind.oid,mind.pid],"focus");
-  b.onclick=()=>{
-    window.alert(gv(mind.oid))
-  }
-  mind.get("ctrl").appendChild(b);
-}
-
 mind.add=()=>{
-  const b=mind.crb("new","add");
-  b.onclick=()=>{
-    const oid=mind.oid
-    if (!ic(oid)){
-      mind.get("lnk").click();
-      return;
+  return mind.getset("add",(eid)=>{
+    const b=mind.crb("new",eid);
+    b.onclick=()=>{
+      const oid=mind.oid
+      if (!ic(oid)){
+        mind.lnk().click();
+        return;
+      };
+      const p=go(oid);
+      const isr=oid===ROOT;
+      const cnt=gl(oid).length;
+      const defVal=isr
+        ? "Class"+cnt
+        : gv(oid).toLowerCase()+"_"+cnt;
+      var v=prompt("add object (e.g. "+defVal+"):");
+      v=!v&&v!=null&&defVal||v;
+      const obj=gid(v);
+      if (!!v&&!!obj) {
+        mind.pid=obj;
+        mind.lnk().click();
+        return;
+      };
+      if (!v) return;
+      const id=co(v,oid);
+      mind.data().appendChild(mind.but(id));
     };
-    const p=go(oid);
-    const isr=oid===ROOT;
-    const cnt=gl(oid).length;
-    const defVal=isr
-      ? "Class"+cnt
-      : gv(oid).toLowerCase()+"_"+cnt;
-    var v=prompt("add object (e.g. "+defVal+"):");
-    v=!v&&v!=null&&defVal||v;
-    const obj=gid(v);
-    if (!!v&&!!obj) {
-      mind.pid=obj;
-      mind.get("lnk").click();
-      return;
-    };
-    if (!v) return;
-    const id=co(v,oid);
-    mind.get("data").appendChild(mind.but(id));
-  };
-  mind.get("ctrl").appendChild(b);
+    mind.ctrl().appendChild(b);
+  })
 };
 
 mind.lnk=()=>{
-  const b=mind.crb("link","lnk");
-  b.onclick=()=>{
-    const oid=mind.oid;
-    const pid=mind.pid;
-    if (pid && pid != oid) {
-      const isl=il(oid,pid);
-      !isl &&
-      confirm("add link between "+gv(oid)+" & "+gv(pid)
-      ) && cl(oid,pid)
-      ||
-      isl &&
-      confirm("delete link between "+gv(oid)+" & "+gv(pid)) &&
-      dl(oid,pid);
-      mind.pid=ROOT;
-      mind.but(mind.oid).click();
-    } else {
-      mind.pid=oid;
-      mind.logres("Selected object "+oid+": "+gv(oid)+"<br>Select another and click link")
+  return mind.getset("lnk",(eid)=>{
+    const b=mind.crb("link",eid);
+    b.onclick=()=>{
+      const oid=mind.oid;
+      const pid=mind.pid;
+      if (pid && pid != oid) {
+        const isl=il(oid,pid);
+        !isl &&
+        confirm("add link between "+gv(oid)+" & "+gv(pid)
+        ) && cl(oid,pid)
+        ||
+        isl &&
+        confirm("delete link between "+gv(oid)+" & "+gv(pid)) &&
+        dl(oid,pid);
+        mind.pid=ROOT;
+        mind.but(mind.oid).click();
+      } else {
+        mind.pid=oid;
+        mind.logres("Selected object "+oid+": "+gv(oid)+"<br>Select another and click link")
+      };
     };
-  };
-  mind.get("ctrl").appendChild(b);
+    mind.ctrl().appendChild(b);
+    return b
+  })
 };
 
 mind.edit=()=>{
-  const b=mind.crb("edit","edit");
-  b.onclick=()=>{
-   const obj=go(mind.oid);
-   const v=prompt("edit",obj[V]);
-   if (!v) return;
-   obj[V]=v;
-  };
-  mind.get("ctrl").appendChild(b);
+  return mind.getset("edit",(eid)=>{
+    const b=mind.crb("edit",eid);
+    b.onclick=()=>{
+     const obj=go(mind.oid);
+     const v=prompt("edit",obj[V]);
+     if (!v) return;
+     obj[V]=v;
+    };
+    mind.ctrl().appendChild(b);
+  })
 };
 
 mind.exp=()=>{
-  const b=mind.crb("save","exp");
-  b.onclick=()=>{
-    confirm("save?")&&
-    localStorage.setItem("ol", JSON.stringify(mind.ol))
-    const a = document.createElement("a")
-    const url = URL.createObjectURL(new Blob([JSON.stringify(mind.ol)], {
-      type: "application/json"
-    }))
-    a.href=url
-    const now=new Date()
-    a.download="objectlink_"+now.toLocaleDateString()+".json"
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  };
-  mind.get("ctrl").appendChild(b);
+  return mind.getset("exp",(eid)=>{
+    const b=mind.crb("save",eid);
+    b.onclick=()=>{
+      confirm("save?")&&
+      localStorage.setItem("ol", JSON.stringify(mind.ol))
+      const a = document.createElement("a")
+      const url = URL.createObjectURL(new Blob([JSON.stringify(mind.ol)], {
+        type: "application/json"
+      }))
+      a.href=url
+      const now=new Date()
+      a.download="objectlink_"+now.toLocaleDateString()+".json"
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    };
+    mind.ctrl().appendChild(b);
+  })
 };
 
 mind.imp=()=>{
-  const b=mind.crb("load","imp");
-  b.onclick=()=>{
-    const div=document.createElement("input");
-    div.type="file"
-    div.id="import"
-    div.accept=".json"
-    div.hidden=true
-    div.onchange=()=>{
-      var fileread = new FileReader()
-      fileread.onload=(e)=>{
-        mind.ol = JSON.parse(e.target.result)
-        mind.initRoot();
+  return mind.getset("imp",(eid)=>{
+    const b=mind.crb("load",eid);
+    b.onclick=()=>{
+      const div=document.createElement("input");
+      div.type="file"
+      div.id="import"
+      div.accept=".json"
+      div.hidden=true
+      div.onchange=()=>{
+        var fileread = new FileReader()
+        fileread.onload=(e)=>{
+          mind.ol = JSON.parse(e.target.result)
+          mind.initRoot();
+        }
+        fileread.readAsText(div.files[0])
       }
-      fileread.readAsText(div.files[0])
-    }
-    document.body.appendChild(div)
-    div.click()
-    document.body.removeChild(div)
-  };
-  mind.get("ctrl").appendChild(b);
+      document.body.appendChild(div)
+      div.click()
+      document.body.removeChild(div)
+    };
+    mind.ctrl().appendChild(b);
+  })
 };
 
 mind.ev=()=>{
-  const b=mind.crb("eval","eval");
-  b.onclick=()=>{
-    mind.logres(eval(prompt("eval")));
-  };
-  mind.get("ctrl").appendChild(b);
+  return mind.getset("eval",(eid)=>{
+  const b=mind.crb("eval",eid);
+    b.onclick=()=>{
+      mind.logres(eval(prompt("eval")));
+    };
+    mind.ctrl().appendChild(b);
+  })
 };
 
 mind.initRoot=()=>{
   const id=mind.oid||ROOT;
   const broot=mind.but(id);
-  mind.get("data").appendChild(broot);
+  mind.data().appendChild(broot);
   broot.click();
 };
 
