@@ -71,7 +71,7 @@ mind.focus=()=>{
   return mind.getset("focus",(eid)=>{
     const b=mind.crb([mind.oid,mind.pid],eid);
     b.onclick=()=>{
-      window.alert(gv(mind.oid))
+      window.alert(mind.gv(mind.oid))
     }
     mind.ctrl().appendChild(b);
     return b
@@ -83,7 +83,7 @@ mind.clk=(e)=>{
   data.innerHTML="";
   const oid=e.target.oid;
   mind.oid=oid;
-  gl(oid).forEach(id=>data.appendChild(mind.but(id)));
+  mind.gl(oid).forEach(id=>data.appendChild(mind.but(id)));
   mind.focus().innerHTML=[mind.oid,mind.pid]
   mind.logres("")
   mind.em(oid)
@@ -104,8 +104,8 @@ mind.crb=(v,id)=>{
 }
 
 mind.but=(oid)=>{
-  const v=gv(oid);
-  const isc=ic(oid);
+  const v=mind.gv(oid);
+  const isc=mind.ic(oid);
   const b=mind.crb(v,"b"+oid);
   b.ic=isc;
   b.style.width="100%";
@@ -120,26 +120,26 @@ mind.add=()=>{
     const b=mind.crb("new",eid);
     b.onclick=()=>{
       const oid=mind.oid
-      if (!ic(oid)){
+      if (!mind.ic(oid)){
         mind.lnk().click();
         return;
       };
-      const p=go(oid);
+      const p=mind.go(oid);
       const isr=oid===ROOT;
-      const cnt=gl(oid).length;
+      const cnt=mind.gl(oid).length;
       const defVal=isr
         ? "Class"+cnt
-        : gv(oid).toLowerCase()+"_"+cnt;
+        : mind.gv(oid).toLowerCase()+"_"+cnt;
       var v=prompt("add object (e.g. "+defVal+"):");
       v=!v&&v!=null&&defVal||v;
-      const obj=gid(v);
+      const obj=mind.gid(v);
       if (!!v&&!!obj) {
         mind.pid=obj;
         mind.lnk().click();
         return;
       };
       if (!v) return;
-      const id=co(v,oid);
+      const id=mind.co(v,oid);
       mind.data().appendChild(mind.but(id));
     };
     mind.ctrl().appendChild(b);
@@ -153,19 +153,19 @@ mind.lnk=()=>{
       const oid=mind.oid;
       const pid=mind.pid;
       if (pid && pid != oid) {
-        const isl=il(oid,pid);
+        const isl=mind.il(oid,pid);
         !isl &&
-        confirm("add link between "+gv(oid)+" & "+gv(pid)
-        ) && cl(oid,pid)
+        confirm("add link between "+mind.gv(oid)+" & "+mind.gv(pid)
+        ) && mind.cl(oid,pid)
         ||
         isl &&
-        confirm("delete link between "+gv(oid)+" & "+gv(pid)) &&
-        dl(oid,pid);
+        confirm("delete link between "+mind.gv(oid)+" & "+mind.gv(pid)) &&
+        mind.dl(oid,pid);
         mind.pid=ROOT;
         mind.but(mind.oid).click();
       } else {
         mind.pid=oid;
-        mind.logres("Selected object "+oid+": "+gv(oid)+"<br>Select another and click link")
+        mind.logres("Selected object "+oid+": "+mind.gv(oid)+"<br>Select another and click link")
       };
     };
     mind.ctrl().appendChild(b);
@@ -177,7 +177,7 @@ mind.edit=()=>{
   return mind.getset("edit",(eid)=>{
     const b=mind.crb("edit",eid);
     b.onclick=()=>{
-     const obj=go(mind.oid);
+     const obj=mind.go(mind.oid);
      const v=prompt("edit",obj[V]);
      if (!v) return;
      obj[V]=v;
