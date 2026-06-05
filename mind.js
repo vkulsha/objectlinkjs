@@ -40,15 +40,13 @@ const gs=(u,p)=>{
   return sid && cl(sid,uid) && sid
 }
 
-//init new db mind functions
-mind.logstr=(v)=>
-  mind.get("result").innerHTML=v
-
+//mind functions
 mind.logres=(v)=>typeof v==="string" ?
-  mind.logstr(v) :
-  mind.logstr(JSON.stringify(v))
+  mind.result().innerHTML = v :
+  mind.result().innerHTML = JSON.stringify(v)
 
 mind.get=(eid)=>document.getElementById(eid)
+mind.set=(n="div")=>document.createElement(n)
 
 mind.getset=(eid,func)=>{
   const obj=mind.get(eid)
@@ -57,7 +55,7 @@ mind.getset=(eid,func)=>{
 
 mind.div=(eid)=>{
   return mind.getset(eid, (eid)=>{
-    const div=document.createElement("div");
+    const div=mind.set("div");
     div.id=eid;
     div.style.width="100%";
     document.body.appendChild(div);
@@ -92,8 +90,8 @@ mind.clk=(e)=>{
 }
 
 mind.crb=(v,id)=>{
-  const b=document.getElementById(id)
-    || document.createElement("button");
+  const b=mind.get(id)
+    || mind.set("button");
   b.innerHTML=v;
   b.id=id;
   b.style.fontSize="14px";
@@ -194,7 +192,7 @@ mind.exp=()=>{
     b.onclick=()=>{
       confirm("save?")&&
       localStorage.setItem("ol", JSON.stringify(mind.ol))
-      const a = document.createElement("a")
+      const a = mind.set("a")
       const url = URL.createObjectURL(new Blob([JSON.stringify(mind.ol)], {
         type: "application/json"
       }))
@@ -214,7 +212,7 @@ mind.imp=()=>{
   return mind.getset("imp",(eid)=>{
     const b=mind.crb("load",eid);
     b.onclick=()=>{
-      const div=document.createElement("input");
+      const div=mind.set("input");
       div.type="file"
       div.id="import"
       div.accept=".json"
