@@ -1,26 +1,3 @@
-//init
-mind.loadLocalStorageDB=()=>{
-  const db=localStorage.getItem("ol")
-  mind.ol=db&&JSON.parse(db)||mind.ol
-  mind.coli()
-  mind.ems()
-}
-
-mind.initNewDB=()=>{
-  const rid=mind.co(RULE)
-  mind.cl(mind.co(RULE_WATCH),rid)
-  mind.cl(mind.co(RULE_LINK),rid)
-  mind.cmfs()
-  mind.cm("mind.initInterface()")
-};
-
-mind.init=()=>{
-  mind.loadLocalStorageDB()
-  mind.ol.length===OL.length && mind.initNewDB()
-}
-
-addEventListener('load',(e)=>mind.init())
-
 //utils
 function intersec(arr1=[],arr2=[],issort=false){
   if (!issort){
