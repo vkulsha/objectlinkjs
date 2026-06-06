@@ -2,16 +2,16 @@
 const USER="#User"
 const PSWD="#Password"
 const SESSION="#Session"
-const gs=(u,p)=>{
-  const uid=gid(u)
+mind.gs=(u,p)=>{
+  const uid=mind.gid(u)
   const pid=uid
-    && il(uid,gid(USER))
-    && gid(p)
+    && mind.il(uid,gid(USER))
+    && mind.gid(p)
   const sid=pid
-    && il(pid,gid(PSWD))
-    && il(uid,pid)
-    && co(crypto.randomUUID(),gid(SESSION))
-  return sid && cl(sid,uid) && sid
+    && mind.il(pid,mind.gid(PSWD))
+    && mind.il(uid,pid)
+    && mind.co(crypto.randomUUID(),mind.gid(SESSION))
+  return sid && mind.cl(sid,uid) && sid
 }
 
 //mind functions
@@ -131,11 +131,11 @@ mind.lnk=()=>{
       if (pid && pid != oid) {
         const isl=mind.il(oid,pid);
         !isl &&
-        confirm("add link between "+mind.gv(oid)+" & "+mind.gv(pid)
+        confirm("add link between:\n"+mind.gv(oid)+"\n\nand:\n"+mind.gv(pid)
         ) && mind.aem(false) && mind.cl(oid,pid)
         ||
         isl &&
-        confirm("delete link between "+mind.gv(oid)+" & "+mind.gv(pid)) &&
+        confirm("delete link between:\n"+mind.gv(oid)+"\n\nand:\n"+mind.gv(pid)) &&
         mind.dl(oid,pid);
         mind.pid=ROOT;
         mind.but(mind.oid).click();
