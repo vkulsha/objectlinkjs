@@ -86,6 +86,7 @@ mind.clk=(e)=>{
   mind.gl(oid).forEach(id=>data.appendChild(mind.but(id)));
   mind.focus().innerHTML=[mind.oid,mind.pid]
   mind.logres("")
+  mind.aem(false)
   mind.em(oid)
 }
 
@@ -139,6 +140,7 @@ mind.add=()=>{
         return;
       };
       if (!v) return;
+      mind.aem(false)
       const id=mind.co(v,oid);
       mind.data().appendChild(mind.but(id));
     };
@@ -156,7 +158,7 @@ mind.lnk=()=>{
         const isl=mind.il(oid,pid);
         !isl &&
         confirm("add link between "+mind.gv(oid)+" & "+mind.gv(pid)
-        ) && mind.cl(oid,pid)
+        ) && mind.aem(false) && mind.cl(oid,pid)
         ||
         isl &&
         confirm("delete link between "+mind.gv(oid)+" & "+mind.gv(pid)) &&
