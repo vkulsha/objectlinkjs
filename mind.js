@@ -1,29 +1,3 @@
-//rule
-const RULE="#Rule"
-const RULE_WATCH="#RuleWatch"
-const RULE_LINK="#RuleLink"
-const grw=(oid1,oid2)=>{
-  const rw=gid(RULE_WATCH)
-  const w1=ga([oid1,rw])[0]
-  const w2=ga([oid2,rw])[0]
-  return !!w1&&!!w2 && w1
-}
-const er=(oid1,oid2)=>{
-  const rwid=il(oid1,oid2)
-     && grw(oid1,oid2)
-  const r=gid(RULE)
-  const rid=rwid && ga([rwid,r])[0]
-  const rl=gid(RULE_LINK)
-  const rlid=rid && ga([rid,rl])[0]
-  const lids=rlid && gl(rlid)
-  const llids=!!lids && lids
-    .filter(id=>!ic(id)&&!il(id,r))
-  if (!!llids && llids.length===2) {
-    cl(llids[0],llids[1])
-    return true
-  }
-}
-
 //user-pswd-session
 const USER="#User"
 const PSWD="#Password"

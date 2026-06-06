@@ -28,7 +28,7 @@ mind.cl=(oid1,oid2)=>{
       mind.gl(oid2).sort(compareNumeric)
       if (oid1===MIND&&!mind.ic(oid2)) mind.em(oid2)
       if (oid2===MIND&&!mind.ic(oid1)) mind.em(oid1)
-      //er(oid1,oid2)
+      mind.er(oid1,oid2)
       return true
     } else return false
   },
@@ -56,7 +56,10 @@ mind.em=(oid)=>mind.im(oid)
   &&(mind.iem||confirm("execute?\n"+mind.gv(oid)))
   &&mind.eo(oid)
   &&mind.aem(true)
-mind.aem=(bool)=>mind.iem=bool
+mind.aem=(bool)=>{
+  mind.iem=bool
+  return true
+}
 mind.ems=()=>{
   const mids=mind.gl(MIND)
   mids&&mids
@@ -67,3 +70,30 @@ mind.cmfs=()=>Object
     .entries(mind)
     .filter(it=>typeof it[1]==="function")
     .forEach(it=>mind.cm("mind."+it[0]+"="+it[1]))
+
+//rule
+const RULE="#Rule"
+const RULE_WATCH="#RuleWatch"
+const RULE_LINK="#RuleLink"
+mind.grw=(oid1,oid2)=>{
+  const rw=mind.gid(RULE_WATCH)
+  if (!rw) return
+  const w1=mind.ga([oid1,rw])[0]
+  const w2=mind.ga([oid2,rw])[0]
+  return !!w1&&!!w2 && w1
+}
+mind.er=(oid1,oid2)=>{
+  const rwid=mind.il(oid1,oid2)
+     && mind.grw(oid1,oid2)
+  const r=mind.gid(RULE)
+  const rid=rwid && mind.ga([rwid,r])[1]
+  const rl=mind.gid(RULE_LINK)
+  const rlid=rid && mind.ga([rid,rl])[1]
+  const lids=rlid && mind.gl(rlid)
+  const llids=!!lids && lids
+    .filter(id=>!mind.ic(id)&&!mind.il(id,r))
+  if (!!llids && llids.length===2) {
+    mind.cl(llids[0],llids[1])
+    return true
+  }
+}
