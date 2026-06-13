@@ -15,9 +15,11 @@ mind.gs=(u,p)=>{
 }
 
 //mind functions
-mind.logres=(v)=>typeof v==="string" ?
-  mind.result().innerHTML = v :
-  mind.result().innerHTML = JSON.stringify(v)
+mind.log=(v)=>{
+  v=typeof v==="string" ? v : JSON.stringify(v)
+  console.log(v)
+  window.alert(v)
+}
 
 mind.get=(eid)=>document.getElementById(eid)
 mind.set=(n="div")=>document.createElement(n)
@@ -37,9 +39,22 @@ mind.div=(eid)=>{
   })
 }
 
-mind.ctrl=()=>mind.div("ctrl")
-mind.data=()=>mind.div("data")
-mind.result=()=>mind.div("result")
+mind.ctrl=()=>{
+  const div=mind.div("ctrl")
+  div.style.position="fixed"
+  div.style.zIndex=Number.MAX_SAFE_INTEGER
+  div.style.backgroundColor="#ffffff"
+  div.style.top="0"
+  div.style.height="35"
+  return div
+}
+
+mind.data=()=>{
+  const div=mind.div("data")
+  div.style.top="35px"
+  div.style.position="relative"
+  return div
+}
 
 mind.focus=()=>{
   return mind.getset("focus",(eid)=>{
@@ -57,9 +72,11 @@ mind.clk=(e)=>{
   data.innerHTML="";
   const oid=e.target.oid;
   mind.oid=oid;
-  mind.gl(oid).forEach(id=>data.appendChild(mind.but(id)));
+  mind.gl(oid)
+    .slice()
+    .sort((a,b)=>mind.ic(a)&&mind.ic(b)?0:(mind.ic(a)?-1:compareNumeric(a,b)))
+    .forEach(id=>data.appendChild(mind.but(id)));
   mind.focus().innerHTML=[mind.oid,mind.pid]
-  mind.logres("")
   mind.aem(false)
   mind.em(oid)
 }
@@ -141,7 +158,7 @@ mind.lnk=()=>{
         mind.but(mind.oid).click();
       } else {
         mind.pid=oid;
-        mind.logres("Selected object "+oid+": "+mind.gv(oid)+"<br>Select another and click link")
+        window.alert("Selected object "+oid+": "+mind.gv(oid)+"\nSelect another and click link")
       };
     };
     mind.ctrl().appendChild(b);
@@ -213,7 +230,7 @@ mind.ev=()=>{
   return mind.getset("eval",(eid)=>{
   const b=mind.crb("eval",eid);
     b.onclick=()=>{
-      mind.logres(eval(prompt("eval")));
+      mind.log(eval(prompt("eval")));
     };
     mind.ctrl().appendChild(b);
   })
@@ -229,7 +246,6 @@ mind.initRoot=()=>{
 mind.initInterface=()=>{
   mind.ctrl();
   mind.data();
-  mind.result();
   mind.add();
   mind.lnk();
   mind.edit();
