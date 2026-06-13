@@ -5,13 +5,33 @@ const SESSION="#Session"
 mind.gs=(u,p)=>{
   const uid=mind.gid(u)
   const pid=uid
-    && mind.il(uid,gid(USER))
+    && mind.il(uid,mind.gid(USER))
     && mind.gid(p)
   const sid=pid
     && mind.il(pid,mind.gid(PSWD))
     && mind.il(uid,pid)
     && mind.co(crypto.randomUUID(),mind.gid(SESSION))
-  return sid && mind.cl(sid,uid) && sid
+  return sid 
+    && mind.cl(sid,uid) 
+    && mind.cl(sid,pid) 
+    && sid
+}
+
+mind.login=()=>{
+  const u=mind.co(USER)
+  const p=mind.co(PSWD)
+  const s=mind.co(SESSION)
+  mind.cl(u,p)
+  mind.cl(s,u)
+  mind.cl(s,p)
+  const defu="root"
+  const defp="password"
+  const ru=mind.co(defu, u)
+  const rp=mind.co(defp, p)
+  mind.cl(ru,rp)
+  const uv=prompt("enter login:", defu)
+  const pv=prompt("enter password:", defp)
+  if (mind.gs(uv,pv)) mind.initInterface()
 }
 
 //mind functions
@@ -269,7 +289,8 @@ mind.initNewDB=()=>{
   mind.cl(mind.co(RULE_WATCH),rid)
   mind.cl(mind.co(RULE_LINK),rid)
   mind.cmfs()
-  mind.cm("mind.initInterface()")
+  mind.cm("mind.login()")
+  //mind.cm("mind.initInterface()")
 };
 
 mind.init=()=>{

@@ -13,7 +13,9 @@ mind.go=(id)=>mind.ol[id],
 mind.gl=(id)=>mind.go(id)[L],
 mind.gid=(v)=>(mind.oli[md5(v)]||[])[ID],
 mind.co=(v,cid=ROOT)=>{
-    const id=mind.ol.length
+    var id=mind.gid(v)
+    if (id>=0) return id
+    id=mind.ol.length
     const o=[id,v,[]]
     mind.ol.push(o)
     mind.oli[md5(v)]=o
