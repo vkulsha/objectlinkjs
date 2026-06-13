@@ -91,7 +91,7 @@ mind.er=(oid1,oid2)=>{
   const rlid=rid && mind.ga([rid,rl])[1]
   const lids=rlid && mind.gl(rlid)
   const llids=!!lids && lids
-    .filter(id=>!mind.ic(id)&&!mind.il(id,r))
+    .filter(id=>!mind.il(id,r))
   if (!!llids && llids.length===2) {
     mind.cl(llids[0],llids[1])
     return true
