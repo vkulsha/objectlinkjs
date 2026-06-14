@@ -29,9 +29,27 @@ mind.login=()=>{
   const ru=mind.co(defu, u)
   const rp=mind.co(defp, p)
   mind.cl(ru,rp)
-  const uv=prompt("enter login:", defu)
-  const pv=prompt("enter password:", defp)
-  if (mind.gs(uv,pv)) mind.initInterface()
+  //const uv=prompt("enter login:", defu)
+  //const pv=prompt("enter password:", defp)
+  //if (mind.gs(uv,pv)) mind.initInterface()
+  const div=mind.div("login")
+  div.style.position="absolute"
+  div.style.top="45%"
+  div.style.width="50%"
+  div.style.left="25%"
+  const bu=mind.set("input",div)
+  bu.type="text"
+  bu.value=defu
+  const bp=mind.set("input",div)
+  bp.type="password"
+  bp.value=defp
+  const be=mind.set("button",div)
+  be.innerHTML="enter"
+  be.onclick=()=>{
+    if (mind.gs(bu.value,bp.value))
+      mind.initInterface()
+    div.remove()
+  }
 }
 
 //mind functions
@@ -42,7 +60,11 @@ mind.log=(v)=>{
 }
 
 mind.get=(eid)=>document.getElementById(eid)
-mind.set=(n="div")=>document.createElement(n)
+mind.set=(n="div",p=document.body)=>{
+  var e=document.createElement(n)
+  p.appendChild(e)
+  return e
+}
 
 mind.getset=(eid,func)=>{
   const obj=mind.get(eid)
@@ -54,7 +76,7 @@ mind.div=(eid)=>{
     const div=mind.set("div");
     div.id=eid;
     div.style.width="100%";
-    document.body.appendChild(div);
+    //document.body.appendChild(div);
     return div;
   })
 }
