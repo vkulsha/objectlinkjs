@@ -11,14 +11,14 @@ const mind={
 }
 mind.go=(id)=>mind.ol[id],
 mind.gl=(id)=>mind.go(id)[L],
-mind.gid=(v)=>(mind.oli[md5(v)]||[])[ID],
+mind.gid=(v)=>(mind.oli[v]||[])[ID],
 mind.co=(v,cid=ROOT)=>{
     var id=mind.gid(v)
     if (id>=0) return id
     id=mind.ol.length
     const o=[id,v,[]]
     mind.ol.push(o)
-    mind.oli[md5(v)]=o
+    mind.oli[v]=o
     mind.cl(id,cid)
     return id
   },
@@ -48,7 +48,7 @@ mind.dl=(oid1,oid2)=>{
 mind.ga=(oids)=>oids
     .map(e => mind.gl(e))
     .reduce((a,b) => intersec(a,b)),
-mind.coli=()=>mind.ol.forEach(o=>mind.oli[md5(o[V])]=o),
+mind.coli=()=>mind.ol.forEach(o=>mind.oli[o[V]]=o),
 mind.eo=(oid)=>eval(mind.gv(oid)),
 
 //mind
