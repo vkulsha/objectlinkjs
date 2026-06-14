@@ -64,8 +64,8 @@ mind.ctrl=()=>{
   div.style.position="fixed"
   div.style.zIndex=Number.MAX_SAFE_INTEGER
   div.style.backgroundColor="#ffffff"
-  div.style.top="0"
-  div.style.height="35"
+  div.style.top="0px"
+  div.style.height="35px"
   return div
 }
 

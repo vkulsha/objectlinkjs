@@ -13,43 +13,43 @@ mind.go=(id)=>mind.ol[id],
 mind.gl=(id)=>mind.go(id)[L],
 mind.gid=(v)=>(mind.oli[v]||[])[ID],
 mind.co=(v,cid=ROOT)=>{
-    var id=mind.gid(v)
-    if (id>=0) return id
-    id=mind.ol.length
-    const o=[id,v,[]]
-    mind.ol.push(o)
-    mind.oli[v]=o
-    mind.cl(id,cid)
-    return id
-  },
+  var id=mind.gid(v)
+  if (id>=0) return id
+  id=mind.ol.length
+  const o=[id,v,[]]
+  mind.ol.push(o)
+  mind.oli[v]=o
+  mind.cl(id,cid)
+  return id
+}
 mind.cl=(oid1,oid2)=>{
-    if (!mind.il(oid1,oid2)){
-      mind.gl(oid1).push(oid2)
-      mind.gl(oid2).push(oid1)
-      mind.gl(oid1).sort(compareNumeric)
-      mind.gl(oid2).sort(compareNumeric)
-      if (oid1===MIND&&!mind.ic(oid2)) mind.em(oid2)
-      if (oid2===MIND&&!mind.ic(oid1)) mind.em(oid1)
-      mind.er(oid1,oid2)
-      return true
-    } else return false
-  },
-mind.gv=(id)=>mind.go(id)[V],
-mind.ic=(id)=>mind.gl(id)[0]===0,
-mind.il=(oid1,oid2)=>includes(mind.gl(oid1),oid2),
+  if (!mind.il(oid1,oid2)){
+    mind.gl(oid1).push(oid2)
+    mind.gl(oid2).push(oid1)
+    mind.gl(oid1).sort(compareNumeric)
+    mind.gl(oid2).sort(compareNumeric)
+    if (oid1===MIND&&!mind.ic(oid2)) mind.em(oid2)
+    if (oid2===MIND&&!mind.ic(oid1)) mind.em(oid1)
+    mind.er(oid1,oid2)
+    return true
+  } else return false
+}
+mind.gv=(id)=>mind.go(id)[V]
+mind.ic=(id)=>mind.gl(id)[0]===0
+mind.il=(oid1,oid2)=>includes(mind.gl(oid1),oid2)
 mind.dl=(oid1,oid2)=>{
-    const l1=mind.gl(oid1)
-    const ind1=binSearch(l1,oid2)
-    if (ind1===0||ind1) l1.splice(ind1,1)
-    const l2=mind.gl(oid2)
-    const ind2=binSearch(l2,oid1)
-    if (ind2===0||ind2) l2.splice(ind2,1)
-  },
+  const l1=mind.gl(oid1)
+  const ind1=binSearch(l1,oid2)
+  if (ind1===0||ind1) l1.splice(ind1,1)
+  const l2=mind.gl(oid2)
+  const ind2=binSearch(l2,oid1)
+  if (ind2===0||ind2) l2.splice(ind2,1)
+}
 mind.ga=(oids)=>oids
-    .map(e => mind.gl(e))
-    .reduce((a,b) => intersec(a,b)),
-mind.coli=()=>mind.ol.forEach(o=>mind.oli[o[V]]=o),
-mind.eo=(oid)=>eval(mind.gv(oid)),
+  .map(e => mind.gl(e))
+  .reduce((a,b) => intersec(a,b))
+mind.coli=()=>mind.ol.forEach(o=>mind.oli[o[V]]=o)
+mind.eo=(oid)=>eval(mind.gv(oid))
 
 //mind
 mind.cm=(v)=>mind.co(v,MIND)
