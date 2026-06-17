@@ -3,53 +3,25 @@ const USER="#User"
 const PSWD="#Password"
 const SESSION="#Session"
 mind.gs=(u,p)=>{
+  const user=mind.gid(USER)
+  const pswd=mind.gid(PSWD)
   const uid=mind.gid(u)
   const pid=uid
-    && mind.il(uid,mind.gid(USER))
+    && uid!==user
+    && uid!==pswd
+    && mind.il(uid,user)
     && mind.gid(p)
   const sid=pid
-    && mind.il(pid,mind.gid(PSWD))
+    && pid!==user
+    && pid!==pswd
+    && mind.il(pid,pswd)
     && mind.il(uid,pid)
     && mind.co(crypto.randomUUID(),mind.gid(SESSION))
-  return sid 
+  const result=sid 
     && mind.cl(sid,uid) 
     && mind.cl(sid,pid) 
     && sid
-}
-
-mind.login=()=>{
-  const u=mind.co(USER)
-  const p=mind.co(PSWD)
-  const s=mind.co(SESSION)
-  mind.cl(u,p)
-  mind.cl(s,u)
-  mind.cl(s,p)
-  const defu="root"
-  const defp="password"
-  const ru=mind.co(defu, u)
-  const rp=mind.co(defp, p)
-  mind.cl(ru,rp)
-  //const uv=prompt("enter login:", defu)
-  //const pv=prompt("enter password:", defp)
-  //if (mind.gs(uv,pv)) mind.initInterface()
-  const div=mind.div("login")
-  div.style.position="absolute"
-  div.style.top="45%"
-  div.style.width="50%"
-  div.style.left="25%"
-  const bu=mind.set("input",div)
-  bu.type="text"
-  bu.value=defu
-  const bp=mind.set("input",div)
-  bp.type="password"
-  bp.value=defp
-  const be=mind.set("button",div)
-  be.innerHTML="enter"
-  be.onclick=()=>{
-    if (mind.gs(bu.value,bp.value))
-      mind.initInterface()
-    div.remove()
-  }
+  return result!==false ? result : undefined
 }
 
 //mind functions
@@ -298,6 +270,30 @@ mind.initInterface=()=>{
   mind.initRoot();
 };
 
+mind.login=()=>{
+  document.body.innerHTML=""
+  const div=mind.div("login")
+  div.style.position="absolute"
+  div.style.top="45%"
+  div.style.width="50%"
+  div.style.left="25%"
+  const bu=mind.set("input",div)
+  bu.type="text"
+  bu.value="root"
+  const bp=mind.set("input",div)
+  bp.type="password"
+  bp.value="root"
+  const be=mind.set("button",div)
+  be.innerHTML="enter"
+  be.onclick=()=>{
+    div.remove()
+    if (mind.gs(bu.value,bp.value)/*>=0*/) {
+      mind.oid=ROOT//mind.gid(bu.value)
+      mind.initInterface()
+    } else document.body.innerHTML="Login failed!"
+  }
+}
+
 //init
 mind.loadLocalStorageDB=()=>{
   const db=localStorage.getItem("ol")
@@ -310,6 +306,15 @@ mind.initNewDB=()=>{
   const rid=mind.co(RULE)
   mind.cl(mind.co(RULE_WATCH),rid)
   mind.cl(mind.co(RULE_LINK),rid)
+  
+  const u=mind.co(USER)
+  const p=mind.co(PSWD)
+  const s=mind.co(SESSION)
+  mind.cl(u,p)
+  mind.cl(s,u)
+  mind.cl(s,p)
+  mind.cl(mind.co("root",u),p)
+  
   mind.cmfs()
   mind.cm("mind.login()")
   //mind.cm("mind.initInterface()")

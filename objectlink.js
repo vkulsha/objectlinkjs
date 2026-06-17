@@ -31,12 +31,12 @@ mind.cl=(oid1,oid2)=>{
     if (oid1===MIND&&!mind.ic(oid2)) mind.em(oid2)
     if (oid2===MIND&&!mind.ic(oid1)) mind.em(oid1)
     mind.er(oid1,oid2)
-    return true
-  } else return false
+  }
+  return true
 }
 mind.gv=(id)=>mind.go(id)[V]
 mind.ic=(id)=>mind.gl(id)[0]===0
-mind.il=(oid1,oid2)=>includes(mind.gl(oid1),oid2)
+mind.il=(oid1,oid2)=>oid1===oid2||includes(mind.gl(oid1),oid2)
 mind.dl=(oid1,oid2)=>{
   const l1=mind.gl(oid1)
   const ind1=binSearch(l1,oid2)
