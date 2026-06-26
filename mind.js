@@ -85,12 +85,13 @@ mind.clk=(e)=>{
   const data=mind.data();
   data.innerHTML="";
   const oid=e.target.oid;
+  if (mind.ic(mind.oid)) mind.cid=mind.oid
   mind.oid=oid;
   mind.gl(oid)
     .slice()
     .sort((a,b)=>mind.ic(a)&&mind.ic(b)?0:(mind.ic(a)?-1:compareNumeric(a,b)))
     .forEach(id=>data.appendChild(mind.but(id)));
-  mind.focus().innerHTML=[mind.oid,mind.pid]
+  mind.focus().innerHTML=[mind.oid,mind.pid,mind.cid]
   mind.aem(false)
   mind.em(oid)
 }
@@ -294,6 +295,21 @@ mind.login=()=>{
   }
 }
 
+const IMAGE="#Image"
+mind.image=()=>{
+  const div=mind.div("image")
+  div.style.position="absolute"
+  const but=mind.set("button",div)
+  but.innerHTML="X"
+  const div2=mind.set("div",div)
+  const img=mind.set("img",div2)
+  img.src=mind.gv(mind.oid)
+  img.style.width="97%"
+  but.onclick=()=>{
+    div.remove()
+  }
+}
+
 //init
 mind.loadLocalStorageDB=()=>{
   const db=localStorage.getItem("ol")
@@ -314,6 +330,12 @@ mind.initNewDB=()=>{
   mind.cl(s,u)
   mind.cl(s,p)
   mind.cl(mind.co("root",u),p)
+  
+  const img=mind.co(IMAGE)
+  mind.cl(img,MIND)
+  const mimg=mind.cm("mind.image()")
+  mind.cl(img,mimg)
+  mind.co("/sdcard/DCIM/Camera/20250504_145447.jpg",img)
   
   mind.cmfs()
   mind.cm("mind.login()")

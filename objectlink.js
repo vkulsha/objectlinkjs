@@ -5,6 +5,7 @@ const OL=[[ROOT,"/",[ROOT,MIND]],[MIND,"#Mind",[ROOT]]]
 const mind={
   oid:ROOT,
   pid:ROOT,
+  cid:ROOT,
   ol:OL,
   oli:{},
   iem:true
@@ -54,10 +55,18 @@ mind.eo=(oid)=>eval(mind.gv(oid))
 //mind
 mind.cm=(v)=>mind.co(v,MIND)
 mind.im=(oid)=>oid>0&&!mind.ic(oid)&&mind.il(oid,MIND)
-mind.em=(oid)=>mind.im(oid)
-  &&(mind.iem||confirm(mind.gv(oid)))
-  &&mind.eo(oid)
-  &&mind.aem(true)
+mind.em=(oid)=>
+  mind.im(oid)&&
+  (mind.iem||confirm(mind.gv(oid)))&&
+  mind.eo(oid)&&
+  mind.aem(true)
+  ||
+  mind.cid>1&&
+  !mind.ic(oid)&&
+  !mind.im(oid)&&
+  mind.ga([MIND,mind.cid])
+    .filter(it=>!mind.ic(it))
+    .forEach(it=>mind.eo(it))
 mind.aem=(bool)=>{
   mind.iem=bool
   return true
