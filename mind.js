@@ -297,14 +297,38 @@ mind.login=()=>{
 
 const IMAGE="#Image"
 mind.image=()=>{
+  var oid=mind.oid
+  if (mind.ic(oid)) {
+    const id=mind.gco(oid)[0]
+    if (id) {
+      mind.oid=id
+      oid=id
+      //mind.but(id).click()
+    }
+  }
+  
   const div=mind.div("image")
   div.style.position="absolute"
   const but=mind.set("button",div)
   but.innerHTML="X"
   const div2=mind.set("div",div)
   const img=mind.set("img",div2)
-  img.src=mind.gv(mind.oid)
+  img.src=mind.gv(oid)
   img.style.width="97%"
+  img.num=0
+  img.oid=oid
+  img.onclick=()=>{
+    const num=img.num+1
+    const oid=mind.gco(mind.gc(img.oid))[num]
+    if (oid) {
+      img.num=num
+      img.oid=oid
+      img.src=mind.gv(oid)
+    } else {
+      img.num=-1
+      img.onclick()
+    }
+  }
   but.onclick=()=>{
     div.remove()
   }
@@ -336,6 +360,7 @@ mind.initNewDB=()=>{
   const mimg=mind.cm("mind.image()")
   mind.cl(img,mimg)
   mind.co("/sdcard/DCIM/Camera/20250504_145447.jpg",img)
+  mind.co("/sdcard/DCIM/Camera/20250504_173537.jpg",img)
   
   mind.cmfs()
   mind.cm("mind.login()")

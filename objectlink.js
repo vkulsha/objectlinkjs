@@ -10,9 +10,9 @@ const mind={
   oli:{},
   iem:true
 }
-mind.go=(id)=>mind.ol[id],
-mind.gl=(id)=>mind.go(id)[L],
-mind.gid=(v)=>(mind.oli[v]||[])[ID],
+mind.go=(id)=>mind.ol[id]
+mind.gl=(id)=>mind.go(id)[L]
+mind.gid=(v)=>(mind.oli[v]||[])[ID]
 mind.co=(v,cid=ROOT)=>{
   var id=mind.gid(v)
   if (id>=0) return id
@@ -37,6 +37,8 @@ mind.cl=(oid1,oid2)=>{
 }
 mind.gv=(id)=>mind.go(id)[V]
 mind.ic=(id)=>mind.gl(id)[0]===0
+mind.gc=(oid)=>mind.gl(oid).filter(o=>mind.ic(o))[0]
+mind.gco=(cid)=>mind.ic(cid)&&mind.gl(cid).filter(o=>mind.gc(o)===cid)
 mind.il=(oid1,oid2)=>oid1===oid2||includes(mind.gl(oid1),oid2)
 mind.dl=(oid1,oid2)=>{
   const l1=mind.gl(oid1)
@@ -65,6 +67,13 @@ mind.em=(oid)=>
   !mind.ic(oid)&&
   !mind.im(oid)&&
   mind.ga([MIND,mind.cid])
+    .filter(it=>!mind.ic(it))
+    .forEach(it=>mind.eo(it))
+  ||
+  mind.oid>1&&
+  mind.ic(oid)&&
+  mind.il(oid,MIND)&&
+  mind.ga([MIND,oid])
     .filter(it=>!mind.ic(it))
     .forEach(it=>mind.eo(it))
 mind.aem=(bool)=>{
