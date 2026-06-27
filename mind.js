@@ -301,7 +301,7 @@ mind.image=()=>{
   if (mind.ic(oid)) {
     const id=mind.gco(oid)[0]
     if (id) {
-      mind.oid=id
+      //mind.oid=id
       oid=id
       //mind.but(id).click()
     }
